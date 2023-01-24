@@ -1,9 +1,18 @@
-database={
+--[[
 	example={
 		source="https://example.com/file",
+		info="https://example.com/infoFile",
 		provides={"example","exampletest"},
 		depends={"examlib"},
 		optDepends={optionexample="Optional Functionality"},
+	},
+]]
+
+
+database={
+	ccr={
+	
+	
 	},
 	
 }
