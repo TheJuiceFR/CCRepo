@@ -361,7 +361,7 @@ end
 -- @param str [string] the input string to calcuate its Adler-32 checksum.
 -- @return [integer] The Adler-32 checksum, which is greater or equal to 0,
 -- and less than 2^32 (4294967296).
-function Adler32(str)
+--[[function Adler32(str)
   -- This function is loop unrolled by better performance.
   --
   -- Here is the minimum code:
@@ -402,14 +402,14 @@ function Adler32(str)
     i = i + 1
   end
   return (b * 65536 + a) % 4294967296
-end
+end]]
 
 -- Compare adler32 checksum.
 -- adler32 should be compared with a mod to avoid sign problem
 -- 4072834167 (unsigned) is the same adler32 as -222133129
-local function IsEqualAdler32(actual, expected)
+--[[local function IsEqualAdler32(actual, expected)
   return (actual % 4294967296) == (expected % 4294967296)
-end
+end]]
 
 --- Create a preset dictionary.
 --
@@ -453,7 +453,7 @@ end
 -- decompression.
 -- @raise error if 'strlen' does not match the length of 'str',
 -- or if 'adler32' does not match the Adler-32 checksum of 'str'.
-function CreateDictionary(str, strlen, adler32)
+--[[function CreateDictionary(str, strlen, adler32)
   if type(str) ~= "string" then
     error(("Usage: CreateDictionary(str, strlen, adler32):" ..
             " 'str' - string expected got '%s'."):format(type(str)), 2)
@@ -556,7 +556,7 @@ function CreateDictionary(str, strlen, adler32)
     end
   end
   return dictionary
-end
+end]]
 
 -- Check if the dictionary is valid.
 -- @param dictionary The preset dictionary for compression and decompression.
@@ -2023,7 +2023,7 @@ end
 -- @see compression_configs
 -- @see CreateDictionary
 -- @see DecompressDeflateWithDict
-function CompressDeflateWithDict(str, dictionary, configs)
+--[[function CompressDeflateWithDict(str, dictionary, configs)
   local arg_valid, arg_err = IsValidArguments(str, true, dictionary, true,
                                               configs)
   if not arg_valid then
@@ -2031,7 +2031,7 @@ function CompressDeflateWithDict(str, dictionary, configs)
             "(str, dictionary, configs): " .. arg_err), 2)
   end
   return CompressDeflateInternal(str, dictionary, configs)
-end
+end]]
 
 --- Compress using the zlib format.
 -- @param str [string] the data to be compressed.
@@ -2043,13 +2043,13 @@ end
 -- Zlib formatted compressed data never has padding bits at the end.
 -- @see compression_configs
 -- @see DecompressZlib
-function CompressZlib(str, configs)
+--[[function CompressZlib(str, configs)
   local arg_valid, arg_err = IsValidArguments(str, false, nil, true, configs)
   if not arg_valid then
     error(("Usage: CompressZlib(str, configs): " .. arg_err), 2)
   end
   return CompressZlibInternal(str, nil, configs)
-end
+end]]
 
 --- Compress using the zlib format with a preset dictionary.
 -- @param str [string] the data to be compressed.
@@ -2064,7 +2064,7 @@ end
 -- @see compression_configs
 -- @see CreateDictionary
 -- @see DecompressZlibWithDict
-function CompressZlibWithDict(str, dictionary, configs)
+--[[function CompressZlibWithDict(str, dictionary, configs)
   local arg_valid, arg_err = IsValidArguments(str, true, dictionary, true,
                                               configs)
   if not arg_valid then
@@ -2072,7 +2072,7 @@ function CompressZlibWithDict(str, dictionary, configs)
             "(str, dictionary, configs): " .. arg_err), 2)
   end
   return CompressZlibInternal(str, dictionary, configs)
-end
+end]]
 
 --[[ --------------------------------------------------------------------------
 	Decompress code
@@ -2728,14 +2728,14 @@ end
 -- If the decompression fails (The first return value of this function is nil),
 -- this return value is undefined.
 -- @see CompressDeflateWithDict
-function DecompressDeflateWithDict(str, dictionary)
+--[[function DecompressDeflateWithDict(str, dictionary)
   local arg_valid, arg_err = IsValidArguments(str, true, dictionary)
   if not arg_valid then
     error(("Usage: DecompressDeflateWithDict(str, dictionary): " ..
             arg_err), 2)
   end
   return DecompressDeflateInternal(str, dictionary)
-end
+end]]
 
 --- Decompress a zlib compressed data.
 -- @param str [string] The data to be decompressed
@@ -2750,13 +2750,13 @@ end
 -- If the decompression fails (The first return value of this function is nil),
 -- this return value is undefined.
 -- @see CompressZlib
-function DecompressZlib(str)
+--[[function DecompressZlib(str)
   local arg_valid, arg_err = IsValidArguments(str)
   if not arg_valid then
     error(("Usage: DecompressZlib(str): " .. arg_err), 2)
   end
   return DecompressZlibInternal(str)
-end
+end]]
 
 --- Decompress a zlib compressed data with a preset dictionary.
 -- @param str [string] The data to be decompressed
@@ -2776,14 +2776,14 @@ end
 -- If the decompression fails (The first return value of this function is nil),
 -- this return value is undefined.
 -- @see CompressZlibWithDict
-function DecompressZlibWithDict(str, dictionary)
+--[[function DecompressZlibWithDict(str, dictionary)
   local arg_valid, arg_err = IsValidArguments(str, true, dictionary)
   if not arg_valid then
     error(("Usage: DecompressZlibWithDict(str, dictionary): " ..
             arg_err), 2)
   end
   return DecompressZlibInternal(str, dictionary)
-end
+end]]
 
 -- Calculate the huffman code of fixed block
 do
@@ -2881,7 +2881,7 @@ end
 -- -- "encoded" does not contain "\000" or "\001"
 -- local decoded = codec:Decode(encoded)
 -- -- assert(decoded == SOME_STRING)
-function CreateCodec(reserved_chars, escape_chars, map_chars)
+--[[function CreateCodec(reserved_chars, escape_chars, map_chars)
   if type(reserved_chars) ~= "string" or type(escape_chars) ~= "string" or
     type(map_chars) ~= "string" then
     error("Usage: CreateCodec(reserved_chars," ..
@@ -3016,7 +3016,7 @@ function CreateCodec(reserved_chars, escape_chars, map_chars)
   end
 
   return codec
-end
+end]]
 
 
 -- Credits to WeakAuras2 and Galmok for the 6 bit encoding algorithm.
@@ -3170,7 +3170,7 @@ local _6bit_to_byte = {
 -- left parenthese, or right parenthese)
 -- @param str [string] The string to be encoded.
 -- @return [string] The encoded string.
-function EncodeForPrint(str)
+--[[function EncodeForPrint(str)
   if type(str) ~= "string" then
     error(("Usage: EncodeForPrint(str):" ..
             " 'str' - string expected got '%s'."):format(type(str)), 2)
@@ -3293,4 +3293,4 @@ internals = {
   _6bit_to_byte = _6bit_to_byte,
   InternalClearCache = InternalClearCache
 }
-
+]]
