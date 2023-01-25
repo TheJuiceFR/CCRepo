@@ -1,13 +1,18 @@
 
-local function buildTree(infil,pack,depth)
+local function buildTree(infil,pack,depth,trail)
 	if not depth then depth=0 end
 	for _,n in pairs(fs.list(infil)) do
 		local f=infil.."/"..n
 		if fs.attributes(f).isDir then
-			pack.write(string.rep(">",depth))
-			pack.write(n)
-			pack.write("\n")
-			buildTree(f,pack,depth+1)
+			if trail then
+				pack.write(trail.."/"..n)
+				pack.write("\n")
+				buildTree(f,pack,depth+1,trail.."/"..n)
+			else
+				pack.write(n)
+				pack.write("\n")
+				buildTree(f,pack,depth+1,n)
+			end
 		end
 	end
 end
@@ -45,11 +50,12 @@ local function buildDump(infil,pack,path)
 end
 
 function packup(infil,outfil)
+	assert(fs.attributes(infil).isDir,"Input is not a directory")
 	local pack=fs.open(outfil,'w')
-	buildTree(infil,pack)
-	--pack.write(">")
+	assert(pack,"Output path invalid")
+	assert(pcall(buildTree,infil,pack),"Error building pack tree")
 	pack.write("\n")
-	buildDump(infil,pack)
+	assert(pcall(buildDump,infil,pack),"Error building pack dump")
 	pack.close()
 end
 
@@ -58,30 +64,50 @@ end
 
 
 
-local function parseTree(pack,outfil,depth)
-	
+
+local function parseTree(pack,outfil)
+	repeat
+		local out=pack.readLine()
+		if out and out~="" then
+			fs.makeDir(outfil.."/"..out)
+		end
+	until out==""
+end
+
+local function parseDump(pack,outfil)
+	repeat
+		local out=pack.read(1)
+		local fil=""
+		while out and out~=">" do
+			fil=fil..out
+			out=pack.read(1)
+		end
+		
+		out=pack.read(1)
+		local len=""
+		while out and out~=">" do
+			len=len..out
+			out=pack.read(1)
+		end
+		len=tonumber(len)
+		
+		if type(len)=="number" then
+			local ff=fs.open(outfil.."/"..fil,'w')
+			for n=1,len do
+				ff.write(pack.read(1))
+			end
+			ff.close()
+		end
+	until out==nil
 end
 
 function packdown(infil,outfil)
-	fs.makeDir(outfil)
+	assert(pcall(fs.makeDir,outfil),"Output path invalid")
 	local pack=fs.open(infil,'r')
+	assert(pack,"Pack file does not exist, or is inaccessable")
 	
-	out=""
-	parseTree(pack,outfil,1)
+	assert(pcall(parseTree,pack,outfil),"Error parsing pack tree")
+	assert(pcall(parseDump,pack,outfil),"Error parsing pack dump")
 	
+	pack.close()
 end
-
-
-
---[[
-dir
-
->
-/test>47>47byteshere/odir/fil.lua>12>
-
-
-
-
-
-
-]]
