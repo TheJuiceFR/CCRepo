@@ -55,7 +55,19 @@ elseif option=="purge" then
 		ccr.purge(v,1)
 	end
 elseif option=="update" then
+	ccr.sync(0)
 	
+	local db=ccr.loaddb()
+	local ldb=ccr.loadldb()
+	
+	for k,v in pairs(ldb) do
+		if not db[k] then
+			print("'"..k.."' is not in main database; skipping")
+		elseif v.version~=db[k].version then
+			print(k..": "..v.version.." > "..db[k].version)
+			ccr.install(k)
+		end
+	end
 elseif option=="info" then
 	if tArgs[2]==nil then
 		print("No package name given")
