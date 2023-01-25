@@ -9,10 +9,12 @@
 ]]
 
 
-database={
-	ccr={
-		
-		info="https://github.com/TheJuiceFR/CCRepo/raw/main/ccr/info",
+local database={
+	pack={
+		info="https://github.com/TheJuiceFR/CCRepo/raw/main/pack/info",
+		provides={"pack"},
+		depends={},
+		optDepends={},
 	},
 	
 }
