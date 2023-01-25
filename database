@@ -23,6 +23,14 @@ local database={
 		depends={},
 		optDepends={},
 	},
+	dummy={
+		package="https://github.com/TheJuiceFR/CCRepo/raw/main/ccinit/pkg.pack",
+		version="1.0.0",
+		description="ComputerCraft library loader",
+		provides={"loadlib","000loadlib"},
+		depends={},
+		optDepends={},
+	},
 }
 
 return database
