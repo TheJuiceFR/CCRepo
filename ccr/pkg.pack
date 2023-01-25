@@ -1,6 +1,6 @@
 lib
 
-lib/ccr.lua>3649>
+lib/ccr.lua>3955>
 
 -------------------------------
 ---     local functions     ---
@@ -41,11 +41,14 @@ function loadldb()
 	end
 end
 
-function clearCache()
+function clearCache(verb)
+	if verb and verb>0 then print("Clearing cache") end
 	fs.delete("/tmp/ccr")
+	return true
 end
 
-function sync()
+function sync(verb)
+	if verb and verb>0 then print("Syncing with database") end
 	local response=http.get("https://github.com/TheJuiceFR/CCRepo/raw/main/database")
 	if not response then return false end
 	local dbf=fs.open("/cfg/ccr/db",'w')
@@ -57,7 +60,8 @@ function sync()
 	return true
 end
 
-function resolve(pkg)	--determines what packages need updating.
+function resolve(pkg,verb)	--determines what packages need updating.
+	if verb and verb>0 then print("Finding old packages") end
 	local db=loaddb()
 	local ldb=loadldb()
 	local out={}
@@ -105,6 +109,7 @@ function install(pkg,verb,dep)	--installs or upgrades a package.
 	ldb[pkg]=db[pkg]
 	ldb[pkg].explicit=not dep
 	saveldb(ldb)
+	return true
 end
 
 function remove(pkg,verb,force)			--removes a package
@@ -134,9 +139,11 @@ function remove(pkg,verb,force)			--removes a package
 	
 	ldb[pkg]=nil
 	saveldb(ldb)
+	return true
 end
 
-function purge(pkg)
+function purge(pkg,verb)
+	if verb and verb>0 then print("purging '"..pkg.."'") end
 	local db=loaddb()
 	local ldb=loadldb()
 	
@@ -158,14 +165,15 @@ function purge(pkg)
 	end
 	
 	remove(pkg)
+	return true
 end
 
-function autoremove()		--removes all uneeded dependencies
+--[[function autoremove()		--removes all uneeded dependencies
 
-end
+end]]
 
 ---     global functions    ---
--------------------------------ccr.lua>615>local tArgs={...}
+-------------------------------ccr.lua>2280>local tArgs={...}
 
 local option=tArgs[1]
 
@@ -175,6 +183,8 @@ print([[Usage: ccr <option> [arguments]
 		installs listed package(s)
 	ccr remove <package1> [package2]...
 		removes listed package(s)
+	ccr purge <package1> [package2]..
+		removes listed package(s) and it's config files
 	ccr update
 		updates all packages
 	ccr info <package>
@@ -188,17 +198,95 @@ end
 
 
 if option=="install" then
+	if tArgs[2]==nil then
+		print("No package name given")
+		return
+	end
+	ccr.sync(1)
 	
+	tArgs[1]==nil
+	for k,v in pairs(tArgs) do
+		ccr.install(v,1)
+	end
+	ccr.clearCache(0)
 elseif option=="remove" then
+	if tArgs[2]==nil then
+		print("No package name given")
+		return
+	end
 	
+	tArgs[1]==nil
+	for k,v in pairs(tArgs) do
+		ccr.remove(v,1)
+	end
+elseif option=="purge" then
+	if tArgs[2]==nil then
+		print("No package name given")
+		return
+	end
+	
+	tArgs[1]==nil
+	for k,v in pairs(tArgs) do
+		ccr.purge(v,1)
+	end
 elseif option=="update" then
 	
 elseif option=="info" then
+	if tArgs[2]==nil then
+		print("No package name given")
+		return
+	end
+	ccr.sync(0)
 	
+	local db=ccr.loaddb()
+	local ldb=ccr.loadldb()
+	
+	tArgs[1]==nil
+	for k,v in pairs(tArgs) do
+		if db[v] then
+			print(v..":")
+			print("version: "..db[v].version)
+			print("description: "..db[v].description)
+			if db[v].provides[1] then
+				write("provides: ")
+				for k2,v2 in pairs(db[v].provides) do
+					write(v2..", ")
+				end
+			end
+			if db[v].depends[1] then
+				write("requires: ")
+				for k2,v2 in pairs(db[v].depends) do
+					write(v2..", ")
+				end
+			end
+			if db[v].optDepends[1] then
+				print("Optional packages: ")
+				for k2,v2 in pairs(db[v].optDepends) do
+					print(v2[1]..": "..v2[2])
+				end
+			end
+		else
+			print("'"..v"' is not in main database")
+		end
+		if ldb[v] and (db[v]==nil or ldb[v].version~=db[v].version) then
+			print("local version: "..ldb[v].version)
+		else
+			print("'"..v"' is not installed locally")
+		end
+	end
 elseif option=="list" then
+	local ldb=ccr.loadldb()
+	
+	for k,v in pairs(ldb) do
+		print(k..":",v.version)
+	end
 	
 elseif option=="listall" then
-	
+	ccr.sync(0)
+	local db=ccr.loaddb()
+	for k,v in pairs(db) do
+		print(k..":",v.version)
+	end
 else
 	usageText()
 end

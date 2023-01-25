@@ -39,11 +39,14 @@ function loadldb()
 	end
 end
 
-function clearCache()
+function clearCache(verb)
+	if verb and verb>0 then print("Clearing cache") end
 	fs.delete("/tmp/ccr")
+	return true
 end
 
-function sync()
+function sync(verb)
+	if verb and verb>0 then print("Syncing with database") end
 	local response=http.get("https://github.com/TheJuiceFR/CCRepo/raw/main/database")
 	if not response then return false end
 	local dbf=fs.open("/cfg/ccr/db",'w')
@@ -55,7 +58,8 @@ function sync()
 	return true
 end
 
-function resolve(pkg)	--determines what packages need updating.
+function resolve(pkg,verb)	--determines what packages need updating.
+	if verb and verb>0 then print("Finding old packages") end
 	local db=loaddb()
 	local ldb=loadldb()
 	local out={}
@@ -103,6 +107,7 @@ function install(pkg,verb,dep)	--installs or upgrades a package.
 	ldb[pkg]=db[pkg]
 	ldb[pkg].explicit=not dep
 	saveldb(ldb)
+	return true
 end
 
 function remove(pkg,verb,force)			--removes a package
@@ -132,9 +137,11 @@ function remove(pkg,verb,force)			--removes a package
 	
 	ldb[pkg]=nil
 	saveldb(ldb)
+	return true
 end
 
-function purge(pkg)
+function purge(pkg,verb)
+	if verb and verb>0 then print("purging '"..pkg.."'") end
 	local db=loaddb()
 	local ldb=loadldb()
 	
@@ -156,11 +163,12 @@ function purge(pkg)
 	end
 	
 	remove(pkg)
+	return true
 end
 
-function autoremove()		--removes all uneeded dependencies
+--[[function autoremove()		--removes all uneeded dependencies
 
-end
+end]]
 
 ---     global functions    ---
 -------------------------------
