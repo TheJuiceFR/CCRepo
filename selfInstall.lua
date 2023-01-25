@@ -1,4 +1,5 @@
 local function install(pkg,verb,dep,db,ldb)
+	print(pkg,verb,dep,db,ldb)
 	if not db[pkg] then
 		return false, "'"..pkg.."' package does not exist."
 	end
