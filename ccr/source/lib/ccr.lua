@@ -75,29 +75,29 @@ function install(pkg,verb,dep)	--installs or upgrades a package.
 	if not db[pkg] then			--	[dep] declares the package as a dependency.
 		return false, "'"..pkg.."' package does not exist."
 	end
-	if verb>1 then print("Preparing to install '"..pkg.."'") end
+	if verb and verb>1 then print("Preparing to install '"..pkg.."'") end
 	
-	for k,v in pairs(ldb[pkg].depends) do
+	for k,v in pairs(db[pkg].depends) do
 		if not ldb[v] then
 			if not install(v,verb,true) then return false, "Dependency '"..v.."' could not be installed." end
 		end
 	end
 	
-	remove(pkg,verb-1,true)
-	
-	if verb>1 then print("Downloading '"..pkg.."'") end
+	if verb and verb>1 then print("Downloading '"..pkg.."'") end
 	local path="/tmp/ccr/"..pkg.."_"..db[pkg].version..".pack"
 	local response=http.get(db[pkg].package)
 	if not response then return false,"Error retrieving '"..pkg.."' package from \""..db[pkg].package..'"' end
 	
-	local f=fs.open("/cfg/ccr/db",'w')
+	local f=fs.open(path,'w')
 	repeat
 		local rl=response.read(20)
 		f.write(rl)
 	until rl==nil
 	f.close()
 	
-	if verb>0 then print("installing '"..pkg.."'") end
+	remove(pkg,verb and verb-1,true)
+	
+	if verb and verb>0 then print("installing '"..pkg.."'") end
 	pack.packdown(path,"/")
 	
 	ldb[pkg]=db[pkg]
@@ -117,8 +117,7 @@ function remove(pkg,verb,force)			--removes a package
 			end
 		end
 	end
-	
-	if verb>0 then print("Removing '"..pkg.."'") end
+	if verb and verb>0 then print("Removing '"..pkg.."'") end
 	for k,v in pairs(ldb[pkg].provides) do
 		fs.delete("/etc/"..v)
 		fs.delete("/lib/"..v)
