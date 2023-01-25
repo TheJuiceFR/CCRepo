@@ -11,12 +11,19 @@
 
 local database={
 	pack={
-		info="https://github.com/TheJuiceFR/CCRepo/raw/main/pack/info",
+		pkg="https://github.com/TheJuiceFR/CCRepo/raw/main/pack/pkg.pack",
+		ver="1.0.0",
 		provides={"pack"},
 		depends={},
 		optDepends={},
 	},
-	
+	ccr={
+		pkg="https://github.com/TheJuiceFR/CCRepo/raw/main/ccr/pkg.pack",
+		ver="1.0.0",
+		provides={"ccr"},
+		depends={"pack"},
+		optDepends={},
+	},
 }
 
 

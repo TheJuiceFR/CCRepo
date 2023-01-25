@@ -1,7 +1,0 @@
-local info={
-	pkg="https://github.com/TheJuiceFR/CCRepo/raw/main/pack/pkg.pack",
-	ver="1.0.0",
-	
-}
-
-return info
