@@ -11,8 +11,11 @@
 
 database={
 	ccr={
-	
-	
+		
+		info="https://github.com/TheJuiceFR/CCRepo/raw/main/ccr/info",
 	},
 	
 }
+
+
+return database
