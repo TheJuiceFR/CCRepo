@@ -1,7 +1,7 @@
 startup
 
-loadlib.lua>96>for _,f in pairs(fs.list("/lib")) do
+startup/000loadlib.lua>49>--loads all apis in /lib
+shell.run("loadlib.lua")loadlib.lua>96>for _,f in pairs(fs.list("/lib")) do
     os.unloadAPI("/lib/"..f)
     os.loadAPI("/lib/"..f)
-endstartup/000loadlib.lua>49>--loads all apis in /lib
-shell.run("loadlib.lua")
+end
