@@ -153,10 +153,15 @@ elseif option=="bootstrap" then
 		return
 	end
 	
-	local items={"/ccr.lua","/lib/ccr.lua","/lib/pack.lua","/startup/000loadlib.lua","loadlib.lua"}
+	local items={"/ccr.lua","/lib/ccr.lua","/lib/pack.lua","/startup/000loadlib.lua","/loadlib.lua"}
 	for k,v in ipairs(items) do
-		pcall(fs.copy,v,m..v)
+		if pcall(fs.copy,v,m..v) then
+			print("Copied "..v)
+		else
+			print(v.." not copied")
+		end
 	end
+	print("Creating local database")
 	local newldb={}
 	newldb.ccr=ldb.ccr
 	newldb.pack=ldb.pack
