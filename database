@@ -1,30 +1,20 @@
---[[
-	example={
-		source="https://example.com/file",
-		info="https://example.com/infoFile",
-		provides={"example","exampletest"},
-		depends={"examlib"},
-		optDepends={optionexample="Optional Functionality"},
-	},
-]]
-
-
 local database={
 	pack={
-		pkg="https://github.com/TheJuiceFR/CCRepo/raw/main/pack/pkg.pack",
-		ver="1.0.0",
+		package="https://github.com/TheJuiceFR/CCRepo/raw/main/pack/pkg.pack",
+		version="1.0.0",
+		description="pack: API for packing up a folder of stuff into a file.",
 		provides={"pack"},
 		depends={},
 		optDepends={},
 	},
 	ccr={
-		pkg="https://github.com/TheJuiceFR/CCRepo/raw/main/ccr/pkg.pack",
-		ver="1.0.0",
+		package="https://github.com/TheJuiceFR/CCRepo/raw/main/ccr/pkg.pack",
+		version="1.0.0",
+		description="ccr: CCRepo API and command line interface\nCCRepo provides convenient software installation and updating for ComputerCraft.",
 		provides={"ccr"},
 		depends={"pack"},
 		optDepends={},
 	},
 }
-
 
 return database
