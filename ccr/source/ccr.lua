@@ -29,7 +29,7 @@ if option=="install" then
 	end
 	ccr.sync(1)
 	
-	tArgs[1]==nil
+	tArgs[1]=nil
 	for k,v in pairs(tArgs) do
 		ccr.install(v,1)
 	end
@@ -40,7 +40,7 @@ elseif option=="remove" then
 		return
 	end
 	
-	tArgs[1]==nil
+	tArgs[1]=nil
 	for k,v in pairs(tArgs) do
 		ccr.remove(v,1)
 	end
@@ -50,7 +50,7 @@ elseif option=="purge" then
 		return
 	end
 	
-	tArgs[1]==nil
+	tArgs[1]=nil
 	for k,v in pairs(tArgs) do
 		ccr.purge(v,1)
 	end
@@ -66,7 +66,7 @@ elseif option=="info" then
 	local db=ccr.loaddb()
 	local ldb=ccr.loadldb()
 	
-	tArgs[1]==nil
+	tArgs[1]=nil
 	for k,v in pairs(tArgs) do
 		if db[v] then
 			print(v..":")
