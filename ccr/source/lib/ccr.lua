@@ -20,8 +20,13 @@ function loaddb()
 	local f=loadfile("/cfg/ccr/db")
 	if f then 
 		return f()
+	end
+	sync()
+	local f=loadfile("/cfg/ccr/db")
+	if f then 
+		return f()
 	else
-		return nil
+		return {}
 	end
 end
 
@@ -30,7 +35,7 @@ function loadldb()
 	if f then 
 		return f()
 	else
-		return nil
+		return {}
 	end
 end
 

@@ -1,0 +1,13 @@
+cfg
+cfg/dummy
+etc
+etc/dummy
+lib
+startup
+
+cfg/dummy/test>8>testing!dummy.lua>30>print("hello from root exec!")etc/dummy/test>8>testing!lib/dummy.lua>57>
+function hi()
+	print("hello!")
+end
+
+print("lib loaded!")startup/dummy.lua>25>print("autorun has run!")
