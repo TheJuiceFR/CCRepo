@@ -153,13 +153,14 @@ elseif option=="bootstrap" then
 		return
 	end
 	
-	local items={"/ccr.lua","/lib/ccr.lua","/lib/pack.lua"}
+	local items={"/ccr.lua","/lib/ccr.lua","/lib/pack.lua","/startup/000loadlib.lua","loadlib.lua"}
 	for k,v in ipairs(items) do
-		fs.copy(v,m..v)
+		pcall(fs.copy,v,m..v)
 	end
 	local newldb={}
-	newldb.ccr=lbd.ccr
-	newldb.pack=lbd.pack
+	newldb.ccr=ldb.ccr
+	newldb.pack=ldb.pack
+	newldb.ccinit=ldb.ccinit
 	
 	local f=fs.open(m.."/cfg/ccr/ldb",'w')
 	f.write("local database=")

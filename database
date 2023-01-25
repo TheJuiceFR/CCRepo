@@ -9,7 +9,7 @@ local database={
 	},
 	ccr={
 		package="https://github.com/TheJuiceFR/CCRepo/raw/main/ccr/pkg.pack",
-		version="0.2.0",
+		version="0.2.1",
 		description="ccr: CCRepo API and command line interface\nCCRepo provides convenient software installation and updating for ComputerCraft.",
 		provides={"ccr"},
 		depends={"pack"},
