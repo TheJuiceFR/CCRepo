@@ -59,11 +59,7 @@ function packup(infil,outfil)
 	pack.close()
 end
 
-
-
-
-
-
+------------------------
 
 local function parseTree(pack,outfil)
 	repeat

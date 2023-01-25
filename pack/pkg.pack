@@ -1,6 +1,6 @@
 lib
 
-lib/pack.lua>2248>
+lib/pack.lua>2268>
 local function buildTree(infil,pack,depth,trail)
 	if not depth then depth=0 end
 	for _,n in pairs(fs.list(infil)) do
@@ -61,11 +61,7 @@ function packup(infil,outfil)
 	pack.close()
 end
 
-
-
-
-
-
+------------------------
 
 local function parseTree(pack,outfil)
 	repeat
