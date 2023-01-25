@@ -15,6 +15,14 @@ local database={
 		depends={"pack"},
 		optDepends={},
 	},
+	dummy={
+		package="https://github.com/TheJuiceFR/CCRepo/raw/main/dummy/pkg.pack",
+		version="69",
+		description="test package for testing purposes",
+		provides={"dummy"},
+		depends={},
+		optDepends={},
+	},
 }
 
 return database
