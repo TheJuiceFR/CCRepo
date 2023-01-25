@@ -1,4 +1,4 @@
-local function install(pkg,verb,dep)
+local function install(pkg,verb,dep,db,ldb)
 	if not db[pkg] then
 		return false, "'"..pkg.."' package does not exist."
 	end
@@ -57,7 +57,7 @@ dbf.close()
 local db=loadfile("/cfg/ccr/db")()
 local ldb={}
 
-install("ccr",3)
+install("ccr",3,false,db,ldb)
 
 print("Creating local database")
 
