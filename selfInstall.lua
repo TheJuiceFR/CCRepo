@@ -6,7 +6,7 @@ local function install(pkg,verb,dep,db,ldb)
 	
 	for k,v in pairs(db[pkg].depends) do
 		if not ldb[v] then
-			if not install(v,verb,true) then return false, "Dependency '"..v.."' could not be installed." end
+			if not install(v,verb,true,db,ldb) then return false, "Dependency '"..v.."' could not be installed." end
 		end
 	end
 	
