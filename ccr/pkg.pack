@@ -173,7 +173,7 @@ end
 end]]
 
 ---     global functions    ---
--------------------------------ccr.lua>2562>local tArgs={...}
+-------------------------------ccr.lua>3501>local tArgs={...}
 
 local option=tArgs[1]
 
@@ -193,6 +193,8 @@ print([[Usage: ccr <option> [arguments]
 		lists installed packages
 	ccr listall
 		lists all available packages
+	ccr bootstrap [side/drive]
+		bootstraps ccr onto disk in drive [side/drive]
 ]])
 end
 
@@ -299,6 +301,57 @@ elseif option=="listall" then
 	for k,v in pairs(db) do
 		print(k..":",v.version)
 	end
+elseif option=="bootstrap" then
+	local ldb=ccr.loadldb()
+	local d
+	if tArgs[2] then
+		d=peripheral.wrap(tArgs[2])
+		if d==nil then
+			print("Drive not found")
+			return
+		end
+	else
+		d=peripheral.find("drive")
+		if d==nil then
+			print("No drive given, no drive found")
+			return
+		end
+	end
+	if d.getDiskID() then
+		print("Floppy disk found. Bootstrap option is intended to be used on computers.")
+		return
+	end
+	
+	local m=d.getMountPath()
+	if m==nil then
+		print("Drive is empty")
+		return
+	end
+	
+	local items={"/ccr.lua","/lib/ccr.lua","/lib/pack.lua"}
+	for k,v in ipairs(items) do
+		fs.copy(v,m..v)
+	end
+	local newldb={}
+	newldb.ccr=lbd.ccr
+	newldb.pack=lbd.pack
+	
+	local f=fs.open(m.."/cfg/ccr/ldb",'w')
+	f.write("local database=")
+	f.write(textutils.serialize(newldb))
+	f.write("\n\nreturn database")
+	f.close()
+	
+	print("Bootstrapping complete")
 else
 	usageText()
 end
+
+
+
+
+
+
+
+
+
