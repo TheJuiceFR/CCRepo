@@ -108,7 +108,7 @@ elseif option=="info" then
 		if ldb[v] and (db[v]==nil or ldb[v].version~=db[v].version) then
 			print("local version: "..ldb[v].version)
 		else
-			print("'"..v"' is not installed locally")
+			print("'"..v.."' is not installed locally")
 		end
 	end
 elseif option=="list" then
