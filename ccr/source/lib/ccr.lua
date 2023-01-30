@@ -124,13 +124,6 @@ function remove(pkg,verb,force)			--removes a package
 	end
 	if verb and verb>0 then print("Removing '"..pkg.."'") end
 	for k,v in pairs(ldb[pkg].provides) do
-		fs.delete("/etc/"..v)
-		fs.delete("/lib/"..v)
-		fs.delete("/lib/"..v..".lua")
-		fs.delete("/gui/"..v)
-		fs.delete("/gui/"..v..".lua")
-		fs.delete("/startup/"..v)
-		fs.delete("/startup/"..v..".lua")
 		fs.delete(v)
 		fs.delete(v..".lua")
 	end

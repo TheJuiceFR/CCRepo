@@ -1,0 +1,4 @@
+gui
+gui/games
+
+gui/games/redirection.lua>55>shell.run("/rom/programs/fun/advanced/redirection.lua")gui/games/worm.lua>39>shell.run("/rom/programs/fun/worm.lua")gui/games/adventure.lua>44>shell.run("/rom/programs/fun/adventure.lua")
