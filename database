@@ -31,6 +31,14 @@ local database={
 		depends={},
 		optDepends={},
 	},
+	guiutils={
+		package="https://github.com/TheJuiceFR/CCRepo/raw/main/guiutils/pkg.pack",
+		version="1",
+		description="Adds the shell and lua interpreter into the gui folder.",
+		provides={"/gui/utility/shell.lua","/gui/utility/lua.lua"},
+		depends={},
+		optDepends={},
+	},
 }
 
 return database
