@@ -91,12 +91,14 @@ elseif option=="info" then
 				for k2,v2 in pairs(db[v].provides) do
 					write(v2..", ")
 				end
+				print("")
 			end
 			if db[v].depends[1] then
 				write("requires: ")
 				for k2,v2 in pairs(db[v].depends) do
 					write(v2..", ")
 				end
+				print("")
 			end
 			if db[v].optDepends[1] then
 				print("Optional packages: ")
@@ -153,7 +155,7 @@ elseif option=="bootstrap" then
 		return
 	end
 	
-	local items={"/ccr.lua","/lib/ccr.lua","/lib/pack.lua","/startup/000loadlib.lua","/loadlib.lua"}
+	local items={"/ccr.lua","/startup/ccr.lua","/lib/ccr.lua","/lib/pack.lua","/startup/000loadlib.lua","/loadlib.lua"}
 	for k,v in ipairs(items) do
 		if pcall(fs.copy,v,m..v) then
 			print("Copied "..v)

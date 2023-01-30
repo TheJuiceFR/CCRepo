@@ -9,9 +9,9 @@ local database={
 	},
 	ccr={
 		package="https://github.com/TheJuiceFR/CCRepo/raw/main/ccr/pkg.pack",
-		version="1.0.1",
+		version="1.1.0",
 		description="ccr: CCRepo API and command line interface\nCCRepo provides convenient software installation and updating for ComputerCraft.",
-		provides={"/ccr.lua","/lib/ccr.lua"},
+		provides={"/ccr.lua","/lib/ccr.lua","/startup/ccr.lua"},
 		depends={"pack","ccinit"},
 		optDepends={},
 	},
