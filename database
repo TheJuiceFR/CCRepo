@@ -39,6 +39,14 @@ local database={
 		depends={},
 		optDepends={},
 	},
+	ccrgui={
+		package="https://github.com/TheJuiceFR/CCRepo/raw/main/ccrgui/pkg.pack",
+		version="1.0.0",
+		description="A GUI program for managin your packages!",
+		provides={"/gui/utility/CCRepoGUI"},
+		depends={"ccr"},
+		optDepends={},
+	},
 }
 
 return database
