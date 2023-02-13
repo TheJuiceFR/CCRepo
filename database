@@ -42,9 +42,17 @@ local database={
 	ccrgui={
 		package="https://github.com/TheJuiceFR/CCRepo/raw/main/ccrgui/pkg.pack",
 		version="1.0.0",
-		description="A GUI program for managin your packages!",
+		description="A GUI program for managing your packages!",
 		provides={"/gui/utility/CCRepoGUI"},
 		depends={"ccr"},
+		optDepends={},
+	},
+	jturtle={
+		package="https://github.com/TheJuiceFR/CCRepo/raw/main/jturtle/pkg.pack",
+		version="2.0.0",
+		description="jTurtle",
+		provides={"/lib/jTurtle.lua"},
+		depends={"ccinit"},
 		optDepends={},
 	},
 }
