@@ -1,5 +1,6 @@
 
 
+
 -------------------------------
 ---     local functions     ---
 
@@ -74,6 +75,7 @@ function resolve(pkg,verb)	--determines what packages need updating.
 end
 
 function install(pkg,verb,dep)	--installs or upgrades a package.
+	assert(pack~=nil,"Pack API not loaded")
 	local db=loaddb()			--	[verb] sets level of verbosity
 	local ldb=loadldb()			--		0:slient 1:succinct 2:verbose
 	if not db[pkg] then			--	[dep] declares the package as a dependency.

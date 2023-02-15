@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2.1.1
+v2.2.0
 
 By The Juice
 
@@ -179,7 +179,7 @@ function turn(d,lengt)
 	elseif d=="l" then
 		func=turnLeft
 	else
-		error(d.." is not a valid direction, try: 'r' 'l'")
+		error(tostring(d).." is not a valid direction, try: 'r' 'l'")
 	end
 	for x=1,n do
 		func()
@@ -195,14 +195,14 @@ function dig(d)
 	elseif d=="d" then
 		return turtle.digDown()
 	else
-		error(d.." is not a valid direction, try: 'f' 'u' 'd'")
+		error(tostring(d).." is not a valid direction, try: 'f' 'u' 'd'")
 	end
 end
 
 function place(d,itemName)
 	local _,rea=selectItem(itemName)
 	if rea=="missing" then
-		return false,"missing"
+		return false,"No items to place"
 	end
 	
 	if d=="f" or d==nil then
@@ -212,7 +212,7 @@ function place(d,itemName)
 	elseif d=="d" then
 		return turtle.placeDown()
 	else
-		error(d.." is not a valid direction, try: 'f' 'u' 'd'")
+		error(tostring(d).." is not a valid direction, try: 'f' 'u' 'd'")
 	end
 end
 
@@ -237,7 +237,7 @@ function move(d,lengt)
 	elseif d=="d" then
 		func=down
 	else
-		error(d.." is not a valid direction, try: 'f' 'b' 'u' 'd'")
+		error(tostring(d).." is not a valid direction, try: 'f' 'b' 'u' 'd'")
 	end
 	for n=1,leng do
 		local tries=0
@@ -354,16 +354,6 @@ end
 
 
 
-
-function getItemDetail(slot)
-	local d=turtle.getItemDetail(slot)
-	if d~=nil then
-		return d
-	else
-		return {count=0,name="minecraft:air",damage=0}
-	end
-end
-
 function selectItem(name)
 	if type(name)=="string" then
 		if getItemDetail(turtle.getSelectedSlot()).name~=name then
@@ -380,30 +370,42 @@ function selectItem(name)
 		else
 			return true
 		end
-	elseif type(name)=='number' and name>=1 and name<=16 and name==math.floor(name) then
+	elseif type(name)=='number' and name==math.floor(name) then
+		name=(name-1)%16+1
 		turtle.select(name)
+	end
+end
+
+function getItemDetail(slot)
+	local _,rea=selectItem(slot)
+	if rea=="missing" then
+		return false,"missing"
+	end
+	local d=turtle.getItemDetail()
+	if d~=nil then
+		return d
 	else
-		return false,"non-str-or-num"
+		return {count=0,name="minecraft:air",damage=0}
 	end
 end
 
 function equipItem(side,name)
-	local dum,rea=selectItem(name)
+	local _,rea=selectItem(name)
 	if rea=="missing" then
 		return false,"missing"
 	end
 	
 	if side=='r' then
-		turtle.equipRight()
+		return turtle.equipRight()
 	elseif side=='l' then
-		turtle.equipLeft()
+		return turtle.equipLeft()
 	else
-		error(side.." is not a valid side, try: 'l' 'r'")
+		error(tostring(side).." is not a valid side, try: 'l' 'r'")
 	end
 end
 
 function unequipItem(side)
-	local dum,rea=selectItem("minecraft:air")
+	local _,rea=selectItem("minecraft:air")
 	if rea=="missing" then
 		return false,"noSpace"
 	end
@@ -413,7 +415,7 @@ function unequipItem(side)
 	elseif side=='l' then
 		turtle.equipLeft()
 	else
-		error(side.." is not a valid side, try: 'l' 'r'")
+		error(tostring(side).." is not a valid side, try: 'l' 'r'")
 	end
 end
 
@@ -421,8 +423,34 @@ function fuel()
 	return turtle.getFuelLevel()
 end
 
---[[
-function refuel()
-	
+function maxFuel()
+	return turtle.getFuelLimit()
 end
-]]
+
+function refuel(amount,item)
+	local fl=fuel()
+	if type(amount)~="number" then
+		amount=maxFuel()-fl
+	end
+	
+	local t=1
+	if type(item)~="number" then t=16 end
+	for n=1,t do
+		if item==nil then
+			selectItem(turtle.getSelectedSlot()+1)
+		else
+			local _,res=selectItem(item)
+			if res=="missing" then
+				return false,"missing"
+			end
+		end
+		repeat
+			local res=turtle.refuel()
+		until fuel()>=maxFuel or res==false
+	end
+	if type(amount)~=number or fuel()-fl>=amount then
+		return true
+	else
+		return false,amount-(fuel()-fl)
+	end
+end
