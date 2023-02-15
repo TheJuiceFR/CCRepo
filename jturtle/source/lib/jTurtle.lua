@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2.2.2
+v2.2.3
 
 By The Juice
 
@@ -241,7 +241,7 @@ function move(d,lengt)
 	end
 	for n=1,leng do
 		local tries=0
-		while not func() and tries<10 do
+		while not func() and tries<3 do
 			tries=tries+1
 			sleep(.5)
 		end
@@ -330,19 +330,22 @@ end
 function moveTo(x,y,z)
 	repeat
 		local sx,sy,sz,sd=getPos()
-		if sy>y then
+		if y==nil then
+		elseif sy>y then
 			move('d',sy-y)
 		elseif sy<y then
 			move('u',y-sy)
 		end
-		if sx>x then
+		if x==nil then
+		elseif sx>x then
 			turnTo(1)
 			move('f',sx-x)
 		elseif sx<x then
 			turnTo(3)
 			move('f',x-sx)
 		end
-		if sz>z then
+		if z==nil then
+		elseif sz>z then
 			turnTo(2)
 			move('f',sz-z)
 		elseif sz<z then
