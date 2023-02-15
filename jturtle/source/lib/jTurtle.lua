@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2
+v2.1.0
 
 By The Juice
 
@@ -25,47 +25,74 @@ TODO: location keeping
 
 ]]
 
-dir=0	--	0=south, 1=west, 2=north, 3=east
+local dir=0	--	0=south, 1=west, 2=north, 3=east
+local pos={0,0,0}
+local gpsav=true
+if gps.locate()==nil then gpsav=false end
+
 
 function getPos()
-	local x,y,z=gps.locate()
-	assert(x~=nil,"I'm lost!")
-	return x,y,z,dir
+	return pos[1],pos[2],pos[3],dir
 end
 
-function setDir(I)
+local function setDir(I)
 	dir=I%4
 end
 
-function addDir(I)
+local function addDir(I)
 	setDir(dir+I)
 end
 
-local bx,by,bz=getPos()
+if gpsav then
+	local bx,by,bz=gps.locate()
+	pos={bx,by,bz}
 
-while turtle.forward()~=true do
-	turtle.turnRight()
-end
+	while turtle.forward()~=true do
+		turtle.turnRight()
+	end
 
-local ax,ay,az=getPos()
+	local ax,ay,az=gps.locate()
 
-turtle.back()
+	turtle.back()
 
-if ax>bx then
-	dir=3
-elseif ax<bx then
-	dir=1
-elseif az>bz then
-	dir=0
-elseif az<bz then
-	dir=2
+	if ax>bx then
+		dir=3
+	elseif ax<bx then
+		dir=1
+	elseif az>bz then
+		dir=0
+	elseif az<bz then
+		dir=2
+	else
+		error("IDK, this isn't supposed to crash here.")
+	end
+	
 else
-	error("IDK, this isn't supposed to crash here.")
+	local f=fs.open("/cfg/jTurtle/home.json",'r')
+	local o
+	if f~=nil then
+		o=textutils.unserialiseJSON(f.readLine())
+		f.close()
+	end
+	
+	if type(o)=="table" then
+		pos=o.pos
+		dir=o.dir
+	end
 end
 
 local function forward()
 	res,err=turtle.forward()
 	if res then
+		if dir==0 then
+			pos[3]=pos[3]+1
+		elseif dir==1 then
+			pos[1]=pos[1]-1
+		elseif dir==2 then
+			pos[3]=pos[3]-1
+		else
+			pos[1]=pos[1]+1
+		end
 		sleep(.51)
 	end
 	return res,err
@@ -74,6 +101,15 @@ end
 local function back()
 	res,err=turtle.back()
 	if res then
+		if dir==0 then
+			pos[3]=pos[3]-1
+		elseif dir==1 then
+			pos[1]=pos[1]+1
+		elseif dir==2 then
+			pos[3]=pos[3]+1
+		else
+			pos[1]=pos[1]-1
+		end
 		sleep(.51)
 	end
 	return res,err
@@ -82,6 +118,7 @@ end
 local function up()
 	res,err=turtle.up()
 	if res then
+		pos[2]=pos[2]+1
 		sleep(.51)
 	end
 	return res,err
@@ -90,6 +127,7 @@ end
 local function down()
 	res,err=turtle.down()
 	if res then
+		pos[2]=pos[2]-1
 		sleep(.51)
 	end
 	return res,err
@@ -121,6 +159,12 @@ end
 
 
 
+function setHome(x,y,z,d)
+	local f=fs.open("/cfg/jTurtle/home.json",'w')
+	local in={pos={x,y,z},dir=d}
+	f.write(textutils.serializeJSON(in))
+	f.close()
+end
 
 function turn(d,lengt)
 	local n
@@ -156,7 +200,7 @@ function dig(d)
 end
 
 function place(d,itemName)
-	local dum,rea=selectItem(itemName)
+	local _,rea=selectItem(itemName)
 	if rea=="missing" then
 		return false,"missing"
 	end
