@@ -1,10 +1,10 @@
 lib
 
-lib/jTurtle.lua>7227>--[[
+lib/jTurtle.lua>7295>--[[
 
 jTurtle API
 
-v2.2.1
+v2.2.2
 
 By The Juice
 
@@ -138,7 +138,7 @@ end
 local function turnRight()
 	res,err=turtle.turnRight()
 	if res then
-		jTurtle.addDir(1)
+		addDir(1)
 		sleep(.51)
 	end
 	return res,err
@@ -147,7 +147,7 @@ end
 local function turnLeft()
 	res,err=turtle.turnLeft()
 	if res then
-		jTurtle.addDir(-1)
+		addDir(-1)
 		sleep(.51)
 	end
 	return res,err
@@ -330,26 +330,29 @@ function turnTo(d)
 end
 
 function moveTo(x,y,z)
-	local sx,sy,sz,sd=getPos()
-	if sy>y then
-		move('d',sy-y)
-	elseif sy<y then
-		move('u',y-sy)
-	end
-	if sx>x then
-		turnTo(1)
-		move('f',sx-x)
-	elseif sx<x then
-		turnTo(3)
-		move('f',x-sx)
-	end
-	if sz>z then
-		turnTo(2)
-		move('f',sz-z)
-	elseif sz<z then
-		turnTo(0)
-		move('f',z-sz)
-	end
+	repeat
+		local sx,sy,sz,sd=getPos()
+		if sy>y then
+			move('d',sy-y)
+		elseif sy<y then
+			move('u',y-sy)
+		end
+		if sx>x then
+			turnTo(1)
+			move('f',sx-x)
+		elseif sx<x then
+			turnTo(3)
+			move('f',x-sx)
+		end
+		if sz>z then
+			turnTo(2)
+			move('f',sz-z)
+		elseif sz<z then
+			turnTo(0)
+			move('f',z-sz)
+		end
+		sx,sy,sz,sd=getPos()
+	until sx==x and sy==y and sz==z
 end
 
 
