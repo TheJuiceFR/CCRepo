@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2.1.0
+v2.1.1
 
 By The Juice
 
@@ -161,8 +161,8 @@ end
 
 function setHome(x,y,z,d)
 	local f=fs.open("/cfg/jTurtle/home.json",'w')
-	local in={pos={x,y,z},dir=d}
-	f.write(textutils.serializeJSON(in))
+	local tex={pos={x,y,z},dir=d}
+	f.write(textutils.serializeJSON(tex))
 	f.close()
 end
 
