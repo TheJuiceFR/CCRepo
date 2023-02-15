@@ -35,6 +35,22 @@ function getPos()
 	return pos[1],pos[2],pos[3],dir
 end
 
+function getHome()
+	local f=fs.open("/cfg/jTurtle/home.json",'r')
+	local o
+	if f~=nil then
+		o=textutils.unserialiseJSON(f.readLine())
+		f.close()
+	end
+	
+	if type(o)=="table" then
+		return o.pos[1],o.pos[2],o.pos[3],o.dir
+	else
+		return 0,0,0,0
+	end
+end
+
+
 local function setDir(I)
 	dir=I%4
 end
@@ -68,17 +84,10 @@ if gpsav then
 	end
 	
 else
-	local f=fs.open("/cfg/jTurtle/home.json",'r')
-	local o
-	if f~=nil then
-		o=textutils.unserialiseJSON(f.readLine())
-		f.close()
-	end
+	local bx,by,bz,bd=getHome()
 	
-	if type(o)=="table" then
-		pos=o.pos
-		dir=o.dir
-	end
+	pos={bx,by,bz}
+	dir=bd
 end
 
 local function forward()
