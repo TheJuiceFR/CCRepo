@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2.2.4
+v2.2.5
 
 By The Juice
 
@@ -245,7 +245,7 @@ function move(d,leng)
 			tries=tries+1
 			sleep(.5)
 			if tries>=3 then
-				return false,leng-(n+1),"obst"
+				return false,(leng-n)+1,"obst"
 			end
 		end
 	end
