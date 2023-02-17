@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2.2.3
+v2.2.4
 
 By The Juice
 
@@ -15,13 +15,9 @@ suggestions to thejuiceirl@gmail.com
 
 TODO: getItem
 TODO: putItem
-TODO: equipItem
 TODO: placeItem
-TODO: setFuelPreference
-TODO: refuel
 TODO: getmethods
 TODO: help
-TODO: location keeping
 
 ]]
 
@@ -225,13 +221,8 @@ function place(d,itemName)
 	end
 end
 
-function move(d,lengt)
-	local leng
-	if lengt==nil then
-		leng=1
-	else
-		leng=lengt
-	end
+function move(d,leng)
+	if leng==nil then leng=1 end
 	if jTurtle.fuel()<leng then
 		return false,leng,"fuel"
 	end
@@ -250,12 +241,12 @@ function move(d,lengt)
 	end
 	for n=1,leng do
 		local tries=0
-		while not func() and tries<3 do
+		while not func() do
 			tries=tries+1
 			sleep(.5)
-		end
-		if tries==10 then
-			return false,leng-n+1,"obst"
+			if tries>=3 then
+				return false,leng-(n+1),"obst"
+			end
 		end
 	end
 	return true,0
