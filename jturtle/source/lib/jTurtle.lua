@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2.2.5
+v2.2.6
 
 By The Juice
 
@@ -454,7 +454,7 @@ function refuel(amount,item)
 			local res=turtle.refuel()
 		until fuel()>=maxFuel() or res==false
 	end
-	if type(amount)~=number or fuel()-fl>=amount then
+	if type(amount)~="number" or fuel()-fl>=amount then
 		return true
 	else
 		return false,amount-(fuel()-fl)
