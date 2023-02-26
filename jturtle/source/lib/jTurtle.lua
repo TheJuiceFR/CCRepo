@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2.2.7
+v2.2.8
 
 By The Juice
 
@@ -353,6 +353,7 @@ function moveTo(x,y,z)
 			move('f',z-sz)
 		end
 		sx,sy,sz,sd=getPos()
+		sleep(1)
 	until sx==x and sy==y and sz==z
 end
 
