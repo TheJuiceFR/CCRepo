@@ -2,7 +2,7 @@
 
 jTurtle API
 
-v2.2.8
+v2.2.9
 
 By The Juice
 
@@ -353,7 +353,6 @@ function moveTo(x,y,z)
 			move('f',z-sz)
 		end
 		sx,sy,sz,sd=getPos()
-		sleep(1)
 	until sx==x and sy==y and sz==z
 end
 
@@ -443,9 +442,7 @@ function refuel(amount,item)
 	local t=1
 	if type(item)~="number" then t=16 end
 	for n=1,t do
-		if item==nil then
-			selectItem(turtle.getSelectedSlot()+1)
-		else
+		if item then
 			local _,res=selectItem(item)
 			if res=="missing" then
 				return false,"missing"
@@ -454,6 +451,9 @@ function refuel(amount,item)
 		repeat
 			local res=turtle.refuel(1)
 		until fuel()>=maxFuel() or res==false
+		if not item then
+			selectItem(turtle.getSelectedSlot()+1)
+		end
 	end
 	if type(amount)~="number" or fuel()-fl>=amount then
 		return true

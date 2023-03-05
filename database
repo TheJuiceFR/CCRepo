@@ -49,7 +49,7 @@ local database={
 	},
 	jturtle={
 		package="https://github.com/TheJuiceFR/CCRepo/raw/main/jturtle/pkg.pack",
-		version="2.2.8",
+		version="2.2.9",
 		description="jTurtle",
 		provides={"/lib/jTurtle.lua"},
 		depends={"ccinit"},
