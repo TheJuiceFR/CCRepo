@@ -117,7 +117,7 @@ function sync(verb)
 	local dbf=fs.open("/cfg/ccr/db",'w')
 	repeat
 		local rl=response.read(20)
-		dbf.write(rl)
+		if rl then dbf.write(rl) end
 	until rl==nil
 	dbf.close()
 	return true
@@ -161,7 +161,7 @@ function install(pkg,verb,dep)	--installs or upgrades a package.
 	local f=fs.open(path,'w')
 	repeat
 		local rl=response.read(20)
-		f.write(rl)
+		if rl then f.write(rl) end
 	until rl==nil
 	f.close()
 	
