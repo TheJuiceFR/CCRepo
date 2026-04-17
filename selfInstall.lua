@@ -74,7 +74,7 @@ local function install(pkg,verb,dep,db,ldb)
 	local f=fs.open(path,'w')
 	repeat
 		local rl=response.read(20)
-		f.write(rl)
+		if rl then f.write(rl) end
 	until rl==nil
 	f.close()
 	
@@ -101,7 +101,7 @@ end
 local dbf=fs.open("/cfg/ccr/db",'w')
 repeat
 	local rl=response.read(20)
-	dbf.write(rl)
+	if rl then dbf.write(rl) end
 until rl==nil
 dbf.close()
 local db=loadfile("/cfg/ccr/db")()
